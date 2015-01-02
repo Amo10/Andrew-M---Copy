@@ -1,0 +1,11 @@
+import java.lang.*;
+public class BalloonProject {
+	public static void main(String[] args){
+		Balloon myBalloon = new Balloon();
+		myBalloon.setColor("red");
+		myBalloon.inflate(101);	
+		for(int x = 3; x < 13; x++)(
+				myBalloon.inflate(x -_1););
+		
+	}
+}

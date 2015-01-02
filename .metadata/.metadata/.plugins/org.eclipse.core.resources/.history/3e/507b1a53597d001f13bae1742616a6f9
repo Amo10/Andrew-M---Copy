@@ -1,0 +1,11 @@
+
+public class Balloon {
+	int air;
+	String color;
+	String typeGas;
+	public Balloon(){
+		air=0;
+		color="clear";
+		typeGas="helium";
+	}
+}

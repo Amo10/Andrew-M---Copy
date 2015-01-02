@@ -1,0 +1,11 @@
+import java.awt.*;
+import javax.swing.*;
+public class TheManRun {
+	
+	public TheManRun(){
+		JOptionPane pane = new JOptionPane("", 1, 0);
+		String[] one = new String [3];
+		one[0] = "no";
+		pane.showOptionDialog(null, "be happy!", "", 1, 1,null, one, null);
+	}
+}

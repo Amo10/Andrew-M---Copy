@@ -1,0 +1,10 @@
+public class Book {
+	int numPages;
+	String title;
+	String text;
+	public Book(int p, String t, String te){
+		numPages = p;
+		title = t;
+		text = te;
+	}
+}

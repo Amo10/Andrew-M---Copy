@@ -1,0 +1,9 @@
+import java.lang.*;
+public class BalloonProject {
+	public static void main(String[] args){
+		Balloon myBalloon = new Balloon();
+		myBalloon.setColor("red");
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); 
+		String text = in.readLine();
+	}
+}

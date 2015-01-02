@@ -1,0 +1,45 @@
+import java.awt.*;
+public class Brick {
+	private int x;//location variables for the brick
+	private int y;
+	private Color brickColor;//color for the brick
+	private int width;//width of the brick
+	private int height;//height of the brick
+	private int timesHit=0;
+	
+	public Brick(int xIn, int yIn){//default constructor
+		x = xIn;
+		y = yIn;
+		width = 30;
+		height = 20;
+		brickColor = new Color(190,137,238);
+		
+		
+	}
+	public  Brick(int xIn, int yIn, Color brickColorIn, int widthIn, int heightIn){
+		x = xIn;
+		y = yIn;
+		brickColor = brickColorIn;
+		width = widthIn;
+		height = heightIn;
+	}
+	
+	public int getX(){
+		return x;
+	}
+	public int getY(){
+		return y;
+	}
+	public Color getBrickColor(){
+		return brickColor;
+	}
+	public int getWidth(){
+		return width;
+	}
+	public int getHeight(){
+		return height;
+	}
+	public void increment hit
+}
+
+	

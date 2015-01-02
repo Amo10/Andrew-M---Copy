@@ -1,0 +1,27 @@
+import javax.swing.JFrame;
+
+
+/**
+ * The 'main' class.  All it really does is create the Frame
+ * It does not add contents
+ * @author Albert Morlan
+ *
+ */
+public class Game {
+
+	/**
+	 * Creates the JFrame and adds a JPanel
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		JFrame frame = new JFrame();
+		frame.add(new GamePanel());
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setTitle("Game");
+		frame.setResizable(false);
+		frame.pack();
+		frame.setVisible(true);
+	}
+
+}

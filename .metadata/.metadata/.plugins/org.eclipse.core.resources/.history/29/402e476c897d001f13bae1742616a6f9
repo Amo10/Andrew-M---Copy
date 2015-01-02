@@ -1,0 +1,46 @@
+import java.lang.*;
+/* balloon project
+ * by Andrew Morris*/
+
+public class Balloon {
+	private int air; //amount of air in balloon
+	private String color; //color of balloon
+	private String typeGas; //type of gas in balloon
+	boolean isPopped = false;//The balloon is not popped
+	public Balloon(){ //Default constructor
+		air = 0;
+		color = "clear";
+		typeGas = "helium";
+	}
+	public Balloon(int airIn, String colorIn, String typeGasIn){// override constructor
+		air = airIn;
+		color = colorIn;
+		typeGas = typeGasIn;
+		
+	}
+	public void inflate(int newAir){
+		air += newAir;// air = air + newAir
+		if (air > 100){
+			isPopped = true;
+			System.out.println("You over filled your "+ (color) + " Ballon with " + (air-100)+ " to menny " + (typeGas)+ "s it popped." );
+			air = 0;
+		
+		}
+		else {
+			System.out.println("Your " + (color) + " balloon has " + (typeGas) + " molecules of air.");
+		}
+	}
+	public void setColor (String newColor){
+		color = newColor;
+	}
+	public void setGas(String newGas){
+		typeGas = newGas;
+	}
+	public String getColor(){
+		return color;
+	}
+	public String gettypeGas(){
+		return typeGas;
+	}
+		
+}

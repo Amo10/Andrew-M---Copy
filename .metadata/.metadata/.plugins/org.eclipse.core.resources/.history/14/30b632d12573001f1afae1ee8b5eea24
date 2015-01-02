@@ -1,0 +1,27 @@
+import java.util.Scanner;
+public class Menu {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println("Choose your fighter");
+			System.out.println	("Kazuya");
+			System.out.println	("Jin");
+			System.out.println	("Lars");
+			System.out.println	("Random");
+		Scanner scan=new Scanner (System.in);
+		char num=(char)scan.charAt(0);
+		switch(num){
+		case 'a': System.out.println("Kazuya");
+			break;
+		case 'b': System.out.println("Jin");
+			break;
+		case 'c': System.out.println("Lars");
+			break;
+		default: System.out.println("Random");	
+		}
+	}
+
+}

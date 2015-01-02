@@ -1,0 +1,14 @@
+import java.lang.*;
+import java.io.*;
+public class BalloonProject {
+	public static void main(String[] args){
+		Balloon myBalloon = new Balloon();
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); 
+		try{
+		String text = in.readLine();
+	}
+	catch(IOException e){
+		
+	}
+		
+}

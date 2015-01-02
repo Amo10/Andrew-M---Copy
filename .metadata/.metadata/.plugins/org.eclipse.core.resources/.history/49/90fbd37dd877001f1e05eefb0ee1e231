@@ -1,0 +1,32 @@
+/**
+ * A basic 'hello world' program
+ * 
+ * @author Albert
+ * 
+ */
+public class TestBook {
+
+	/**
+	 * The all-powerful main method
+	 * 
+	 * @param args
+	 *            Any runtime arguments used
+	 */
+	public static void main(String[] args) {
+     System.out.println("   _____    _________  _______  ___.___     _____          __");
+     System.out.println("  /  _  \\  /   _____/ /   ___ \\|   |   |   /  _  \\________/  |_");
+     System.out.println(" /  /_\\  \\ \\_____  \\ /    \\  \\/|   |   |  /  /_\\  \\_  __ \\   __\\");
+     System.out.println("/    |    \\/        \\\\     \\___|   |   | /    |    \\  | \\/|  |");
+     System.out.println("\\_::.|___ /_.:::.___/ \\.::.___ /:._|.:.| \\::..|____/:.|   |._|");
+     System.out.println("           __             __");
+     System.out.println("________  |__|       __  |__|");
+     System.out.println("\\______ \\  __  _____|  |_ __  ____   ____ _____ _______ __ __");
+     System.out.println(" |    |  \\|  |/ ___\\   __\\  |/  _ \\ /    \\\\__  \\\\_  __ <  |  |");
+     System.out.println(" |    `   \\  \\  \\___|  | |  (  <_> )   |  \\/ __ \|  | \\/\\__  |");
+     /_________/__|\_____>__| |__|\____/|___|__(______/__|      / |
+                                                             __/  |
+                                                             \    |
+                                     _.                       \_ /
+
+	}
+}

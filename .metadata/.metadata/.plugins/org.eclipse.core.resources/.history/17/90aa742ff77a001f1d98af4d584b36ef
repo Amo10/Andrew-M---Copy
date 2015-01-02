@@ -1,0 +1,828 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.Container;
+import java.util.Random;
+import java.util.Scanner;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+import javax.swing.Timer;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.io.BufferedWriter;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.File;
+import java.io.IOException;
+
+public class GamePanel extends JPanel implements ActionListener, KeyListener {
+	/**
+	 * The horizontal position of the player
+	 */
+	private int x;
+	/**
+	 * The vertical position of the player
+	 */
+	private int y;
+	/**
+	 * The player's previous horizontal position
+	 */
+	private int lastX;
+	/**
+	 * The player's previous vertical position
+	 */
+	private int lastY;
+	/**
+	 * The level the player is currently on
+	 */
+	int level = 1;
+	/**
+	 * The number of lives the player has left
+	 */
+	int lives = 3;
+	/**
+	 * The array of characters displayed on the end-of-level blocks
+	 */
+	final char[] next = { 'N', 'e', 'x', 't', ' ', 'L', 'e', 'v', 'e', 'l' };
+	/**
+	 * The array of characters displayed on the win blocks
+	 */
+	final char[] finish = { 'F', 'i', 'n', 'i', 's', 'h' };
+	/**
+	 * A timer that repaints/checks for collisions
+	 */
+	Timer t;
+	/**
+	 * A timer used to move the platforms in lvl 4
+	 */
+	Timer mover;
+	/**
+	 * A timer used to move the platforms in lvl 5
+	 */
+	Timer mover2;
+	/**
+	 * A timer used to move the platforms in lvl 6
+	 */
+	Timer mover3;
+	Timer mover4;
+	/**
+	 * A random number generator
+	 */
+	Timer switcher;
+	Random r;
+	/**
+	 * A boolean that determines which direction the platforms move
+	 */
+	boolean gone;
+	/**
+	 * A boolean that determines which direction the platforms move
+	 */
+	boolean gone2;
+	/**
+	 * A boolean that determines if the player is falling
+	 */
+	boolean falling;
+	/**
+	 * A boolean that determines if the platforms in level 7 have switched
+	 */
+	boolean switched;
+	boolean started;
+	/**
+	 * an int that increments every time a multidirectional platform changes
+	 * directions
+	 */
+	int dir;
+	/**
+	 * The array of horizontal locations for the moving platforms
+	 */
+	int[] platsX = { 10, 100, 100, 0 };
+	/**
+	 * The array of vertical locations for the moving platforms
+	 */
+	int[] platsY = { 200, 300, 350, 480 };
+	/**
+	 * The menubar
+	 */
+	static JMenuBar menu = new JMenuBar();
+	/**
+	 * The only menu option
+	 */
+	static JMenu file = new JMenu("File");
+	/**
+	 * The menu item that saves the game
+	 */
+	static JMenuItem save = new JMenuItem("Save");
+	/**
+	 * The menu item that loads the game
+	 */
+	static JMenuItem load = new JMenuItem("Load");
+
+	JFileChooser fc;
+
+	/**
+	 * The constructor
+	 */
+	public GamePanel() {
+		super();
+		this.setPreferredSize(new Dimension(300, 500));
+		this.setFocusable(true);
+		this.grabFocus();
+		this.addKeyListener(this);
+		r = new Random(System.currentTimeMillis());
+		t = new Timer(50, this);
+		t.setActionCommand("check");
+		falling = true;
+		mover = new Timer(2500, this);
+		mover.setActionCommand("move");
+		mover2 = new Timer(1250, this);
+		mover2.setActionCommand("moveTwo");
+		mover3 = new Timer(2000, this);
+		mover3.setActionCommand("moveThree");
+		mover4 = new Timer(1000, this);
+		mover4.setActionCommand("moveFour");
+		switcher = new Timer(3000, this);
+		switcher.setActionCommand("switch");
+
+		fc = new JFileChooser();
+		File f = new File("./src/data");
+		fc.setCurrentDirectory(f);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"Game Save Files", "game");
+		fc.setFileFilter(filter);
+		fc.setAcceptAllFileFilterUsed(false);
+		save.addActionListener(this);
+		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+				KeyEvent.CTRL_MASK));
+		load.addActionListener(this);
+		load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
+				KeyEvent.CTRL_MASK));
+		x = 10;
+		y = 10;
+		lastX = 10;
+		lastY = 10;
+		gone = true;
+		gone2 = true;
+		switched = false;
+		started = false;
+		dir = 1;
+	}
+
+	/**
+	 * The paint method. Displays the appropriate block depending on what level
+	 * the player is on.
+	 */
+	public void paint(Graphics g) {
+		char[] lifeText = { 'L', 'i', 'v', 'e', 's' };
+		super.paintComponent(g);
+		t.start();
+		if (level == 1) {
+			levelOne(g);
+		} else if (level == 2) {
+			levelTwo(g);
+		} else if (level == 3) {
+			levelThree(g);
+		} else if (level == 4) {
+			mover.start();
+			levelFour(g);
+		} else if (level == 5) {
+			mover2.start();
+			levelFive(g);
+		} else if (level == 6) {
+			mover3.start();
+			levelSix(g);
+		} else if (level == 7) {
+			switcher.start();
+			levelSeven(g);
+		} else if (level == 8) {
+			// TODO add timer code
+			if(!started){
+				System.out.println("Starts as:"+ dir);
+				dir = 1;
+				mover4.start();
+			}
+			started = true;
+			levelEight(g);
+		}
+		g.setColor(Color.BLUE);
+		g.fillOval(x, y, 10, 10);
+		g.setColor(Color.BLACK);
+		g.drawChars(lifeText, 0, lifeText.length, 240, 10);
+		if (lives > 0) {
+			g.setColor(Color.RED);
+			for (int i = 1; i <= lives; i++) {
+				g.fillOval(300 - (30 * i), 10, 30, 30);
+			}
+		} else {
+			lives = 3;
+		}
+
+	}
+
+	/**
+	 * Paints level 1
+	 * 
+	 * @param g
+	 *            the graphics used by the constructor
+	 */
+	void levelOne(Graphics g) {
+		g.setColor(Color.RED);
+		g.fillRect(150, 250, 60, 25);
+		g.setColor(Color.BLACK);
+		g.drawChars(next, 0, next.length, 150, 260);
+	}
+
+	/**
+	 * Paints level 2
+	 * 
+	 * @param g
+	 *            the graphics used by the constructor
+	 */
+
+	void levelTwo(Graphics g) {
+		g.setColor(Color.RED);
+		g.fillRect(150, 450, 60, 25);
+		g.setColor(Color.BLACK);
+		g.drawChars(next, 0, next.length, 150, 460);
+		g.fillRect(150, 300, 50, 45);
+	}
+
+	/**
+	 * Paints level 3
+	 * 
+	 * @param g
+	 *            the graphics used by the constructor
+	 */
+	void levelThree(Graphics g) {
+		g.setColor(Color.RED);
+		g.fillRect(150, 450, 60, 25);
+		g.setColor(Color.CYAN);
+		g.fillRect(50, 200, 20, 30);
+		g.fillRect(150, 300, 50, 45);
+		g.setColor(Color.BLACK);
+		g.drawChars(next, 0, next.length, 150, 460);
+	}
+
+	/**
+	 * paint lvl 4
+	 * 
+	 * @param g
+	 */
+	void levelFour(Graphics g) {
+		g.setColor(Color.RED);
+		g.fillRect(150, 450, 60, 25);
+		g.setColor(Color.BLACK);
+		g.fillRect(platsX[0], platsY[0], 100, 10);
+		g.drawChars(next, 0, next.length, 150, 460);
+	}
+
+	/**
+	 * Paints lvl 5
+	 * 
+	 * @param g
+	 */
+	void levelFive(Graphics g) {
+		g.setColor(Color.RED);
+		g.fillRect(150, 450, 60, 25);
+		g.setColor(Color.BLACK);
+		g.drawChars(next, 0, next.length, 150, 460);
+		g.setColor(Color.CYAN);
+		g.fillRect(0, 100, 200, 10);
+		g.fillRect(200, 200, 100, 10);
+		g.fillRect(platsX[1], platsY[1], 100, 10);
+		g.fillRect(200, 400, 100, 10);
+	}
+
+	/**
+	 * paints lvl 6
+	 * 
+	 * @param g
+	 */
+	void levelSix(Graphics g) {
+		g.setColor(Color.RED);
+		g.fillRect(150, 450, 60, 25);
+		g.setColor(Color.BLACK);
+		g.drawChars(next, 0, next.length, 150, 460);
+		g.fillRect(platsX[2], platsY[2], 100, 10);
+	}
+
+	void levelSeven(Graphics g) {
+		if (!switched) {
+			g.setColor(Color.RED);
+			g.fillRect(50, 450, 60, 25);
+			g.setColor(Color.CYAN);
+			g.fillRect(190, 450, 60, 25);
+			g.setColor(Color.BLACK);
+			g.drawChars(next, 0, next.length, 50, 460);
+		} else {
+			g.setColor(Color.CYAN);
+			g.fillRect(50, 450, 60, 25);
+			g.setColor(Color.RED);
+			g.fillRect(190, 450, 60, 25);
+			g.setColor(Color.BLACK);
+			g.drawChars(next, 0, next.length, 190, 460);
+		}
+	}
+
+	void levelEight(Graphics g) {
+		g.setColor(Color.RED);
+		g.fillRect(platsX[3], platsY[3], 60, 20);
+		g.setColor(Color.black);
+		g.drawChars(finish, 0, finish.length, platsX[3], platsY[3] + 10);
+	}
+
+	void saveGame() {
+		falling = false;
+		int fileVal = fc.showSaveDialog(GamePanel.this);
+		if (fileVal == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			if (file.getName().indexOf('.') == -1) {
+				file = new File(file.getAbsolutePath() + ".game");
+			}
+			try {
+				PrintWriter output = new PrintWriter(new BufferedWriter(
+						new FileWriter(file)));
+				output.println(level);
+				output.println(lives);
+				output.flush();
+			} catch (IOException ex) {
+
+			}
+		}
+		falling = true;
+	}
+
+	void loadGame() {
+		falling = false;
+		int i = 0;
+		int fileVal = fc.showOpenDialog(GamePanel.this);
+		if (fileVal == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			try {
+				Scanner in = new Scanner(file);
+				while (in.hasNextLine()) {
+					if (i == 0) {
+						this.level = Integer.parseInt(in.nextLine());
+					} else if (i == 1) {
+						this.lives = Integer.parseInt(in.nextLine());
+					}
+					i += 1;
+				}
+			} catch (IOException ex) {
+
+			}
+		}
+		x = 10;
+		y = 10;
+		platsX[0] = 0;
+		platsY[0] = 200;
+		platsX[1] = 100;
+		platsY[1] = 300;
+		platsX[2] = 100;
+		platsY[2] = 350;
+		lastY = 10;
+		lastX = 10;
+		gone = true;
+		gone2 = true;
+		dir = 1;
+		falling = true;
+		repaint();
+	}
+
+	/**
+	 * what happens when you win or run out of lives
+	 * 
+	 * @param message
+	 *            the string to be displayed
+	 */
+	public void endGame(String message) {
+		t.stop();
+		mover.stop();
+		mover2.stop();
+		mover3.stop();
+		mover4.stop();
+		switcher.stop();
+		JOptionPane.showMessageDialog(this, message);
+		x = 10;
+		y = 10;
+		platsX[0] = 0;
+		platsY[0] = 200;
+		platsX[1] = 100;
+		platsY[1] = 300;
+		platsX[2] = 100;
+		platsY[2] = 350;
+		platsX[3] = 0;
+		platsY[3] = 480;
+		lastY = 10;
+		lastX = 10;
+		gone = true;
+		gone2 = true;
+		switched = false;
+		started = false;
+		dir = 1;
+	}
+
+	/**
+	 * the action performed method. it is set off by the various timers
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (falling) {
+			y += 3;
+		}
+		if (e.getActionCommand().equals("switch")) {
+			switched = !switched;
+		}
+		if (e.getActionCommand().equals("save")) {
+			saveGame();
+		}
+		if (e.getActionCommand().equals("load")) {
+			loadGame();
+		}
+		if (e.getActionCommand().equals("move")) {
+			gone = !gone;
+		}
+		if (e.getActionCommand().equals("moveTwo")) {
+			if (dir < 4) {
+				dir += 1;
+			} else {
+				dir = 1;
+			}
+		}
+		if (e.getActionCommand().equals("moveThree")) {
+			gone2 = !gone2;
+		}
+		if (level == 4) {
+			if (gone == true) {
+				platsX[0] += 5;
+				if (collision(x, y, 10, 10, platsX[0], platsY[0], 100, 10)
+						&& level == 4) {
+					x += 5;
+					lastX += 5;
+				}
+			} else if (gone == false && level == 4) {
+				platsX[0] -= 5;
+				if (collision(x, y, 10, 10, platsX[0], platsY[0], 100, 10)
+						&& level == 4) {
+					x -= 5;
+					lastX -= 5;
+				}
+			}
+		}		
+		if (level == 5) {
+			if (dir == 1 || dir == 4) {
+				platsX[1] -= 6;
+				if (collision(x, y, 10, 10, platsX[1], platsY[1], 100, 10)) {
+					x -= 6;
+					lastX -= 6;
+				}
+			} else if (dir == 2 || dir == 3) {
+				platsX[1] += 6;
+				if (collision(x, y, 10, 10, platsX[1], platsY[1], 100, 10)) {
+					x += 6;
+					lastX += 6;
+				}
+			}
+		}
+		if (level == 6) {
+			if (gone2) {
+				platsY[2] -= 3;
+				if (collision(x, y, 10, 10, platsX[2], platsY[2], 100, 10)) {
+					y -= 3;
+					lastY -= 3;
+				}
+			} else {
+				platsY[2] += 3;
+				if (collision(x, y, 10, 10, platsX[2], platsY[2], 100, 10)) {
+					y += 3;
+					lastY += 3;
+				}
+			}
+		}
+		if (level == 8) {
+			//TODO
+			if (e.getActionCommand().equals("moveFour")) {
+				System.out.println(dir);
+				dir += 1;
+				mover4.stop();
+				mover3.start();
+			} else if (e.getActionCommand().equals("moveThree")) {
+				System.out.println(dir);
+				if (dir == 4) {
+					dir = 1;
+				} else {
+					dir += 1;
+				}				
+				mover3.stop();
+				mover4.start();
+			}
+		}
+		if (e.getActionCommand().equals("check")) {
+			if (collision(x, y, 10, 10, 150, 250, 60, 25) && level == 1) {
+				level += 1;
+				x = 10;
+				y = 10;
+				lastX = 10;
+				lastY = 10;
+			} else if (collision(x, y, 10, 10, platsX[2], platsY[2], 100, 10)
+					&& level == 6) {
+				x = lastX;
+				y = lastY;
+			} else if (collision(x, y, 10, 10, 20, 100, 160, 10) && level == 5) {
+				if (lives > 1) {
+					endGame("-1 life");
+					lives -= 1;
+				} else if (lives == 1) {
+					endGame("Game Over");
+					level = 1;
+					lives = 3;
+				}
+			} else if (collision(x, y, 10, 10, 200, 200, 100, 10) && level == 5) {
+				if (lives > 1) {
+					endGame("-1 life");
+					lives -= 1;
+				} else if (lives == 1) {
+					endGame("Game Over");
+					level = 1;
+					lives = 3;
+				}
+			} else if (collision(x, y, 10, 10, platsX[1], platsY[1], 100, 10)
+					&& level == 5) {
+				if (lives > 1) {
+					endGame("-1 life");
+					lives -= 1;
+				} else if (lives == 1) {
+					endGame("Game Over");
+					level = 1;
+					lives = 3;
+				}
+			} else if (collision(x, y, 10, 10, 200, 400, 100, 10) && level == 5) {
+				if (lives > 1) {
+					endGame("-1 life");
+					lives -= 1;
+				} else if (lives == 1) {
+					endGame("Game Over");
+					level = 1;
+					lives = 3;
+				}
+			} else if (collision(x, y, 10, 10, platsX[0], platsY[0], 100, 10)
+					&& level == 4) {
+				x = lastX;
+				y = lastY;
+			} else if (collision(x, y, 10, 10, 150, 300, 50, 45) && level == 2) {
+				x = lastX;
+				y = lastY;
+			} else if (collision(x, y, 10, 10, 150, 450, 60, 25)
+					&& (level == 2 || level == 4 || level == 3 || level == 5 || level == 6)) {
+				level += 1;
+				x = 10;
+				y = 10;
+				lastX = 10;
+				lastY = 10;
+			} else if (collision(x, y, 10, 10, 150, 300, 50, 45) && level == 3) {
+				if (lives > 1) {
+					endGame("-1 life");
+					lives -= 1;
+				} else if (lives == 1) {
+					endGame("Game Over");
+					level = 1;
+					lives = 3;
+				}
+			} else if (collision(x, y, 10, 10, 50, 200, 20, 30) && level == 3) {
+				if (lives > 1) {
+					endGame("-1 life");
+					lives -= 1;
+				} else if (lives == 1) {
+					endGame("Game Over");
+					level = 1;
+					lives = 3;
+				}
+			}else if(collision(x, y, 10, 10, platsX[3], platsY[3], 60, 20)){
+				endGame("Congratulations\nYou Win!\nThe Game will now restart");
+				level = 1;
+				lives = 3;
+			}
+			else if (collision(x, y, 10, 10, 0, 500, 300, 50)) {
+				started = false;
+				if (lives > 1) {
+					endGame("-1 life");
+					lives -= 1;
+				} else if (lives == 1) {
+					endGame("Game Over");
+					level = 1;
+					lives = 3;
+				}
+			} else if (!switched && level == 7) {
+				if (collision(x, y, 10, 10, 50, 450, 60, 25)) {
+					level += 1;
+					x = 10;
+					y = 10;
+					lastX = 10;
+					lastY = 10;
+				} else if (collision(x, y, 10, 10, 190, 450, 60, 25)) {
+					if (lives > 1) {
+						endGame("-1 life");
+						lives -= 1;
+					} else if (lives == 1) {
+						endGame("Game Over");
+						level = 1;
+						lives = 3;
+					}
+				}
+			} else if (collision(x, y, 10, 10, 300, 0, 500, 500)) {
+				x = lastX;
+			} else if (collision(x, y, 10, 10, -1, 0, 2, 500)) {
+				x = lastX;
+			} else if (switched && level == 7) {
+				if (collision(x, y, 10, 10, 190, 450, 60, 25)) {
+					level += 1;
+					x = 10;
+					y = 10;
+					lastX = 10;
+					lastY = 10;
+				} else if (collision(x, y, 10, 10, 50, 450, 60, 25)) {
+					if (lives > 1) {
+						endGame("-1 life");
+						lives -= 1;
+					} else if (lives == 1) {
+						endGame("Game Over");
+						level = 1;
+						lives = 3;
+					}
+				}
+			} else {
+				lastY += 3;
+			}
+			if (level == 8) {
+				if (dir == 1) {
+					platsX[3] += 12;
+				} else if (dir == 2) {
+					platsY[3] -= 12;
+				} else if (dir == 3) {
+					platsX[3] -= 12;
+				} else if (dir == 4) {
+					platsY[3] += 12;
+				}
+			}
+		}
+		repaint();
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		int key = arg0.getKeyCode();
+		if (key == KeyEvent.VK_LEFT) {
+			x -= 4;
+		} else if (key == KeyEvent.VK_RIGHT) {
+			x += 4;
+		} else if (key == KeyEvent.VK_UP) {
+			// y -= 3;
+		} else if (key == KeyEvent.VK_DOWN) {
+			y += 3;
+		}
+		if (collision(x, y, 10, 10, 150, 250, 60, 25) && level == 1) {
+			level += 1;
+			x = 10;
+			y = 10;
+			lastX = 10;
+			lastY = 10;
+		} else if (collision(x, y, 10, 10, platsX[2], platsY[2], 100, 10)
+				&& level == 6) {
+			x = lastX;
+			y = lastY;
+		} else if (collision(x, y, 10, 10, platsX[0], platsY[0], 100, 10)
+				&& level == 4) {
+			x = lastX;
+			y = lastY;
+		} else if (collision(x, y, 10, 10, 150, 300, 50, 45) && level == 2) {
+			x = lastX;
+			y = lastY;
+		} else if (collision(x, y, 10, 10, 150, 450, 60, 25) && level == 2) {
+			level += 1;
+			x = 10;
+			y = 10;
+			lastX = 10;
+			lastY = 10;
+		} else if (collision(x, y, 10, 10, 150, 450, 60, 25) && level == 3) {
+			level += 1;
+			x = 10;
+			y = 10;
+			lastX = 10;
+			lastY = 10;
+		} else if (collision(x, y, 10, 10, 150, 300, 50, 45) && level == 3) {
+			if (lives > 1) {
+				endGame("-1 life");
+				lives -= 1;
+			} else if (lives == 1) {
+				endGame("Game Over");
+				level = 1;
+				lives = 3;
+			}
+		} else if (collision(x, y, 10, 10, 50, 200, 20, 30) && level == 3) {
+			if (lives > 1) {
+				endGame("-1 life");
+				lives -= 1;
+			} else if (lives == 1) {
+				endGame("Game Over");
+				level = 1;
+				lives = 3;
+			}
+		} else if (collision(x, y, 10, 10, 300, 0, 500, 500)) {
+			x = lastX;
+		} else if (collision(x, y, 10, 10, -1, 0, 2, 500)) {
+			x = lastX;
+		} else {
+			if (key == KeyEvent.VK_LEFT) {
+				lastX -= 4;
+			} else if (key == KeyEvent.VK_RIGHT) {
+				lastX += 4;
+			} else if (key == KeyEvent.VK_UP) {
+				lastY -= 3;
+			} else if (key == KeyEvent.VK_DOWN) {
+				lastY += 3;
+			}
+		}
+
+		repaint();
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+	} // Do nothing
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+	} // Do nothing
+
+	/**
+	 * checks if two objects are touching
+	 * 
+	 * @param ballX
+	 *            the x position of object 1
+	 * @param ballY
+	 *            the y position of object 2
+	 * @param widthball
+	 *            the width of object 1
+	 * @param heightball
+	 *            the width of object 2
+	 * @param posplatX
+	 *            the x position of object 2
+	 * @param posplatY
+	 *            the y position of object 2
+	 * @param widthplat
+	 *            the width of object 2
+	 * @param heightplat
+	 *            the height of object 2
+	 * @return
+	 */
+	public boolean collision(int ballX, int ballY, int widthball,
+			int heightball, int posplatX, int posplatY, int widthplat,
+			int heightplat) {
+		if (ballX > posplatX && ballX < posplatX + widthplat
+				&& ballY > posplatY && ballY < posplatY + heightplat) {
+			return true;
+		} else if (ballX + widthball > posplatX
+				&& ballX + widthball < posplatX + widthplat && ballY > posplatY
+				&& ballY < posplatY + heightplat) {
+			return true;
+		} else if (ballX > posplatX && ballX < posplatX + widthplat
+				&& ballY + heightball > posplatY
+				&& ballY + heightball < posplatY + heightplat) {
+			return true;
+		} else if (ballX + widthball > posplatX
+				&& ballX + widthball < posplatX + widthplat
+				&& ballY + heightball > posplatY
+				&& ballY + heightball < posplatY + heightplat) {
+			return true;
+		}
+		return false;
+	}
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame();
+		Container c = frame.getContentPane();
+		c.add(new GamePanel());
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setTitle("Game");
+		frame.setResizable(false);
+		file.add(save);
+		file.add(load);
+		menu.add(file);
+		frame.setJMenuBar(menu);
+		save.setActionCommand("save");
+		load.setActionCommand("load");
+		frame.pack();
+		frame.setVisible(true);
+	}
+}

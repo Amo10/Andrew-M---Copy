@@ -1,0 +1,16 @@
+import java.lang.*;
+import java.io.*;
+public class BalloonProject {
+	public static void main(String[] args){
+		Balloon myBalloon = new Balloon();
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); 
+		try{
+			colorInput = in.readLine();
+		}
+		catch(IOException e){
+			System.err.println("you did it");
+		}
+		myBalloon.setColor(colorInput)
+		myBalloon.inflate(4)
+	}
+}

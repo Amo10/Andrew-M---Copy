@@ -1,0 +1,29 @@
+import java.util.Scanner;
+public class SwitchTest {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println("Insert a Number Between 1 and 10");
+		Scanner scan=new Scanner (System.in);
+		int num=scan.nextInt(); 
+		switch(1){
+		case 1: System.out.println("Good Work");
+			break;
+		case 2:
+		case 3:
+		case 4:	
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+		case 9:	
+		case 10: System.out.println("Try Again");
+			break;
+		default: System.out.println("Game Over"); 	
+		}
+	}
+
+}

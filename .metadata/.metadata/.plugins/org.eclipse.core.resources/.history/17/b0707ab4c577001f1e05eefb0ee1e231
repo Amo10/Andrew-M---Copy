@@ -1,0 +1,25 @@
+public class Book {
+	/**
+	 * The number of pages in the book
+	 */
+	int numPages;
+	/**
+	 * The title of the book
+	 */
+	String title;
+	/**
+	 * The text in the book
+	 */
+	String text;
+	/**
+	 * This constructor requires one int and two strings
+	 * @param p The number of pages
+	 * @param t The title of the book
+	 * @param te The text inside the book
+	 */
+	public Book(int p, String t, String te) {
+		numPages = p;
+		title = t;
+		text = te;
+	}
+}

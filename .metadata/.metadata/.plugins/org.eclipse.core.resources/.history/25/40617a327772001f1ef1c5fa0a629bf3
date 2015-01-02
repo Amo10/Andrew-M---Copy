@@ -1,0 +1,22 @@
+
+public class Test {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) { 
+		// TODO Auto-generated method stub
+			int x=5;
+			int y=10;		
+			if(x==y){
+				System.out.println ("woo!");
+			}	
+			else if(x%y==0) {
+				System.out.println (":(");
+			}
+			else {
+				System.out.println (">:(");
+			}
+	}
+
+}

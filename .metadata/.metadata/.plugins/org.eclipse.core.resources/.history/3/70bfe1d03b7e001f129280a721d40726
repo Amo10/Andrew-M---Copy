@@ -1,0 +1,14 @@
+import java.awt.*;
+import javax.swing.*;
+public class TheManRun {
+	
+	public TheManRun(){
+		JOptionPane pane = new JOptionPane();}
+		
+	public String newInputBox(){
+		String theName = "";
+		theName = (String) pane.showInputDialog(null, "Enter name","Name", -1, null, null, null );
+		return theName;
+			
+	}
+}

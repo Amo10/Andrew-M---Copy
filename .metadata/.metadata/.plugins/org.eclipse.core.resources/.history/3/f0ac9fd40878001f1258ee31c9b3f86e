@@ -1,0 +1,47 @@
+import java.util.Scanner;
+import java.util.InputMismatchException;
+
+/**
+ * Converts a numeric grade into a letter grade
+ * 
+ * @author Student
+ * 
+ */
+public class Grader {
+	public static void getLetter() {
+		int grade;
+		Scanner in = new Scanner(System.in);
+		grade = in.nextInt();
+		char letterGrade;
+		if (grade >= 90) {
+			letterGrade = 'A';
+		} else if (grade >= 80) {
+			letterGrade = 'B';
+		} else if (grade >= 73) {
+			letterGrade = 'C';
+		} else if (grade >= 70) {
+			letterGrade = 'D';
+		} else {
+			letterGrade = 'F';
+		}
+		if (grade <= 100) {
+			System.out.println(letterGrade);
+		} else {
+			System.out.println("That's not possible");
+		}
+	}
+
+	/**
+	 * The all powerful main method
+	 * 
+	 * @param args
+	 *            Any runtime arguments used
+	 */
+	public static void main(String[] args) {
+		try {
+
+		} catch (InputMismatchException t) {
+			System.out.println("Please input a number");
+		}
+	}
+}

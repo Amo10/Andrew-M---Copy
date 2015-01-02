@@ -1,0 +1,134 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.*;
+import java.util.Random;
+
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+public class GamePanel extends JPanel implements ActionListener, KeyListener {
+
+	private int ballX;
+	private int ballY;
+	private int widthball;
+	private int heightball;
+	private int[][] plat = new int[100][2];
+	private int widthplat;
+	private int heightplat;
+	public int posplatX;
+	public int posplatY;
+
+	private Timer t;
+	private Random r;
+
+	public GamePanel() {
+		super();
+		int windowwidth = 300;
+		int windowheight = 500;
+		this.setPreferredSize(new Dimension(windowwidth, windowheight));
+		this.setFocusable(true);
+		this.grabFocus();
+		this.addKeyListener(this);
+
+		t = new Timer(100, this);
+		t.start();
+		r = new Random(System.currentTimeMillis());
+
+		ballX = 0;
+		ballY = 0;
+		widthball = 10;
+		heightball = 10;
+		widthplat = 20;
+		heightplat = 10;
+		posplatX = 0;
+		posplatY = 11;
+		for (int i = 0; i < plat.length; i++) {
+			plat[i][0] = r.nextInt(windowwidth - widthplat);
+			plat[i][1] = 50 + (heightplat + 5) * i;
+		}
+	}
+
+	public void paint(Graphics g) {
+		super.paintComponent(g);
+		for (int i = 0; i < plat.length; i++) {
+			g.drawRect(plat[i][0], plat[i][1], widthplat, heightplat);
+		}
+		g.drawOval(ballX, ballY, widthball, heightball);
+		g.setColor(Color.RED);
+		g.fillOval(ballX, ballY, widthball, heightball);
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		int key = arg0.getKeyCode();
+		if (key == KeyEvent.VK_LEFT) {
+			ballX--;
+		} else if (key == KeyEvent.VK_RIGHT) {
+			ballX++;
+		} else if (key == KeyEvent.VK_UP) {
+			ballY--;
+		} else if (key == KeyEvent.VK_DOWN) {
+			ballY++;
+			if (ballY > 500 + heightball) {
+				t.stop();
+			}
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+	} // Do nothing
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+	} // Do nothing
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		ballY+=5;
+		if (ballY > getHeight() - heightball-4) {
+			t.stop();
+		}
+
+		if (heightplat < ballY) {
+			posplatY--;
+		}
+		for (int i = 0; i < plat.length; i++) {
+			plat[i][1]--;
+
+			if (collision(ballX, ballY, widthball, heightball, plat[i][0],
+					plat[i][1], widthplat, heightplat)) {
+				ballY = plat[i][1] - heightball;
+				// set the y of your ball equal to the y of your platform minus
+				// the height of your ball, which sets your ball on top of the
+				// platform
+			}
+		}
+		repaint();
+	}
+
+	public boolean collision(int ballX, int ballY, int widthball,
+			int heightball, int posplatX, int posplatY, int widthplat,
+			int heightplat) {
+		if (ballX > posplatX && ballX < posplatX + widthplat
+				&& ballY > posplatY && ballY < posplatY + heightplat) {
+			return true;
+		} else if (ballX + widthball > posplatX
+				&& ballX + widthball < posplatX + widthplat && ballY > posplatY
+				&& ballY < posplatY + heightplat) {
+			return true;
+		} else if (ballX > posplatX && ballX < posplatX + widthplat
+				&& ballY + heightball > posplatY
+				&& ballY + heightball < posplatY + heightplat) {
+			return true;
+		} else if (ballX + widthball > posplatX
+				&& ballX + widthball < posplatX + widthplat
+				&& ballY + heightball > posplatY
+				&& ballY + heightball < posplatY + heightplat) {
+			return true;
+		}
+		return false;
+	}
+}

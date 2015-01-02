@@ -1,0 +1,21 @@
+import java.awt.*;
+import javax.swing.JFrame;
+
+
+public class Game {
+
+	
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("THE BIG BREAK");
+		frame.add(new GamePanel());
+		Image icon = Toolkit.getDefaultToolkit().getImage("C:\\Documents and Settings\\Student\\Desktop\\images.JPEG");
+		frame.setIconImage(icon); 
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setResizable(false);
+		frame.setAlwaysOnTop(true);
+		frame.setVisible(true);
+		
+	}
+
+}

@@ -1,0 +1,29 @@
+
+/* balloon project
+ * by Andrew Morris*/
+
+public class Balloon {
+	int air; //amount of air in balloon
+	String color; //color of balloon
+	String typeGas; //type of gas in balloon
+	public Balloon(){ //Default constructor
+		air = 0;
+		color = "clear";
+		typeGas = "helium";
+	}
+	public Balloon(int airIn, String colorIn, String typeGasIn){// override constructor
+		air = airIn;
+		color = colorIn;
+		typeGas = typeGasIn;
+	}
+	public void inflate(int newAir){
+		air += newAir;// air = air + newAir
+		} 
+	public void setColor (String newColor){
+		color = newColor;
+	}
+	public void setGas(String newGas){
+		typeGas = newGas;
+	}
+		
+}

@@ -1,0 +1,56 @@
+import java.awt.*;
+public class Brick {
+	private int x;//location variables for the brick
+	private int y;
+	private Color brickColor;//color for the brick
+	private int width;//width of the brick
+	private int height;//height of the brick
+	
+	public Brick(int xIn, int yIn){//default constructor
+		x = xIn;
+		y = yIn;
+		width = 30;
+		height = 20;
+		brickColor = color new Color(255,108,218);
+		
+		
+	}
+	public  Brick(int xIn, int yIn, Color brickColorIn, int widthIn, int heightIn){
+		x = xIn;
+		y = yIn;
+		brickColor = brickColorIn;
+		width = widthIn;
+		height = heightIn;
+	}
+	/*g.fillRect(0, 0, 30, 20);
+	g.fillRect(30, 0, 30, 20);
+	g.fillRect(60, 0, 30, 20);
+	g.fillRect(90, 0, 30, 20);
+	g.fillRect(120, 0, 30, 20);
+	g.fillRect(150, 0, 30, 20);
+	g.fillRect(180, 0, 30, 20);
+	g.fillRect(210, 0, 30, 20);
+	g.fillRect(240, 0, 30, 20);
+	g.fillRect(270, 0, 30, 20);
+	g.fillRect(0, 20, 30, 20);
+	g.fillRect(30, 20, 30, 20);
+	g.fillRect(60, 20, 30, 20);
+	g.fillRect(90, 20, 30, 20);
+	g.fillRect(120, 20, 30, 20);
+	g.fillRect(150, 20, 30, 20);
+	g.fillRect(180, 20, 30, 20);
+	g.fillRect(210, 20, 30, 20);
+	g.fillRect(240, 20, 30, 20);
+	g.fillRect(270, 20, 30, 20);
+	g.fillRect(0, 40, 30, 20);
+	g.fillRect(30, 40, 30, 20);
+	g.fillRect(60, 40, 30, 20);
+	g.fillRect(90, 40, 30, 20);
+	g.fillRect(120, 40, 30, 20);
+	g.fillRect(150, 40, 30, 20);
+	g.fillRect(180, 40, 30, 20);
+	g.fillRect(210, 40, 30, 20);
+	g.fillRect(240, 40, 30, 20);
+	g.fillRect(270, 40, 30, 20);*/
+}
+	

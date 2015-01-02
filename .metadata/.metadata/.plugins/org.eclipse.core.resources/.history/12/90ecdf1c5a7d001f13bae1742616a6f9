@@ -1,0 +1,11 @@
+
+public class Balloon {
+	int air; //amount of air in balloon
+	String color; //color of balloon
+	String typeGas; //type of gas in balloon
+	public Balloon(){ //Constructor
+		air=0;
+		color="clear";
+		typeGas="helium";
+	}
+}

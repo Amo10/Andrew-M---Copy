@@ -1,0 +1,13 @@
+public class TestBook {
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		String title = "Grapes of Wrath";
+		String text = "Grapes";
+		int pages = 129;
+		Book work=new Book (title,text,pages);
+	}
+
+}

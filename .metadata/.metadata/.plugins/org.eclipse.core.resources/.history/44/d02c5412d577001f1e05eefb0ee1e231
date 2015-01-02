@@ -1,0 +1,16 @@
+/**
+ * A basic 'hello world' program
+ * @author Albert
+ *
+ */
+public class TestBook {
+
+	/**
+	 * The all-powerful main method
+	 * 
+	 * @param args Any runtime arguments used
+	 */
+	public static void main(String[] args) {
+		System.out.println("Albert is awesom");
+	}
+}

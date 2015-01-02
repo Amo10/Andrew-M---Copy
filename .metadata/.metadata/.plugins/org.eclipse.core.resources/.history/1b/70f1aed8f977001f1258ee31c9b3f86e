@@ -1,0 +1,25 @@
+public class Grader {
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		int grade = 80;
+		char letterGrade;
+		if (grade >= 90) {
+			letterGrade = 'A';
+		} else if (grade >= 80) {
+			letterGrade = 'B';
+		} else if (grade >= 73) {
+			letterGrade = 'C';
+		} else if (grade >= 70) {
+			letterGrade = 'D';
+		} else {
+			letterGrade = 'F';
+		}
+		if (grade <= 100) {
+			System.out.println(letterGrade);
+		} else {
+			System.out.println("That's not possible");
+		}
+	}
+}
